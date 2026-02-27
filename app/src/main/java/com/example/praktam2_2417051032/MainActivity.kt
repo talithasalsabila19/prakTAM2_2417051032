@@ -1,5 +1,7 @@
 package com.example.praktam2_2417051032
 
+import Model.Food
+import Model.FoodSource
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.praktam2_2417051032.ui.theme.PrakTAM2_2417051032Theme
+import androidx.compose.foundation.layout.Column
+import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,9 +25,6 @@ class MainActivity : ComponentActivity() {
             PrakTAM2_2417051032Theme {
                 Scaffold( modifier = Modifier.fillMaxSize() ) { innerPadding ->
                     Greeting(
-                        name = "Talitha Roihanah Salsabila",
-                        npm = "2417051032",
-                        modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
@@ -32,17 +33,25 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, npm:String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Halo $name saya dengan $npm siap belajar compouse!",
-        modifier = modifier
-    )
+fun Greeting() {
+
+    val food = FoodSource.dummyFood[0]
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(30.dp)
+    ) {
+        Text(text = "Nama: ${food.nama}")
+        Text(text = "Deskripsi: ${food.deskripsi}")
+        Text(text = "Harga: ${food.harga}")
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     PrakTAM2_2417051032Theme {
-        Greeting(name = "Android", npm= "2417051032")
+        Greeting()
     }
 }
