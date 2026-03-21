@@ -37,8 +37,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.material3.Card
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import com.example.praktam2_2417051032.ui.theme.PrakTAM2_2417051032Theme
 class MainActivity : ComponentActivity() {
 
@@ -68,19 +75,34 @@ fun BookList(modifier: Modifier = Modifier) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .statusBarsPadding(),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
         item {
             Text(
-                text = "Rekomendasi Novel",
-                fontSize = 26.sp,
+                text = "Rekomendasi Populer",
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
-        }
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(books) { book ->
+                    BookRowItem(book)
+                }
+            }
 
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Text(
+                text = "Daftar Novel",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+        }
         items(books) { book ->
             BookItem(book)
         }
@@ -88,18 +110,45 @@ fun BookList(modifier: Modifier = Modifier) {
 }
 
 @Composable
+fun BookRowItem(book: Book) {
+    Card(
+        modifier = Modifier.width(150.dp),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column {
+            Image(
+                painter = painterResource(id = book.gambar),
+                contentDescription = book.nama,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                contentScale = ContentScale.Crop
+            )
+
+            Column(modifier = Modifier.padding(8.dp)) {
+                Text(
+                    text = book.nama,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun BookItem(book: Book) {
     var isFavorite by remember { mutableStateOf(false) }
+
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 20.dp)
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
 
-        Column(
-            modifier = Modifier.padding(12.dp)
+        Column(modifier = Modifier.fillMaxWidth()) {
 
-        ){
             Box {
                 Image(
                     painter = painterResource(id = book.gambar),
@@ -109,46 +158,52 @@ fun BookItem(book: Book) {
                         .height(200.dp),
                     contentScale = ContentScale.Crop
                 )
+
                 IconButton(
                     onClick = { isFavorite = !isFavorite },
-                    modifier = Modifier.align(Alignment.TopEnd)
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(8.dp)
                 ) {
                     Icon(
                         imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                        contentDescription = "Favorite Icon",
+                        contentDescription = "Favorite",
                         tint = if (isFavorite) Color.Red else Color.White
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(10.dp))
 
-            Text(
-                text = book.nama,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
+            Column(modifier = Modifier.padding(12.dp)) {
 
-            Text(
-                text = "Penulis : ${book.pencipta}",
-                fontSize = 14.sp
-            )
+                Text(
+                    text = book.nama,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
 
-            Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
-            Text(
-                text = book.deskripsi,
-                fontSize = 14.sp
-            )
+                Text(
+                    text = "Penulis: ${book.pencipta}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
 
-            Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
-            Button(
-                onClick = { },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Baca Sekarang")
+                Text(
+                    text = book.deskripsi,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Button(
+                    onClick = {},
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Baca Sekarang")
+                }
             }
-
         }
     }
 }
