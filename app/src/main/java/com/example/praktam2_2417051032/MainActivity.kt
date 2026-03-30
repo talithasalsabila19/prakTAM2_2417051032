@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Card
@@ -46,6 +45,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.background
+import androidx.compose.material3.ButtonDefaults
 import com.example.praktam2_2417051032.ui.theme.PrakTAM2_2417051032Theme
 class MainActivity : ComponentActivity() {
 
@@ -75,7 +76,8 @@ fun BookList(modifier: Modifier = Modifier) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .statusBarsPadding(),
+            .statusBarsPadding()
+            .background(MaterialTheme.colorScheme.background),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -83,8 +85,7 @@ fun BookList(modifier: Modifier = Modifier) {
         item {
             Text(
                 text = "Rekomendasi Populer",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.titleLarge
             )
 
             LazyRow(
@@ -99,8 +100,7 @@ fun BookList(modifier: Modifier = Modifier) {
 
             Text(
                 text = "Daftar Novel",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.titleLarge
             )
         }
         items(books) { book ->
@@ -114,8 +114,11 @@ fun BookRowItem(book: Book) {
     Card(
         modifier = Modifier.width(150.dp),
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    )
+    {
         Column {
             Image(
                 painter = painterResource(id = book.gambar),
@@ -129,8 +132,7 @@ fun BookRowItem(book: Book) {
             Column(modifier = Modifier.padding(8.dp)) {
                 Text(
                     text = book.nama,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
         }
@@ -144,8 +146,11 @@ fun BookItem(book: Book) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
-    ) {
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    )
+    {
 
         Column(modifier = Modifier.fillMaxWidth()) {
 
@@ -168,7 +173,7 @@ fun BookItem(book: Book) {
                     Icon(
                         imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                         contentDescription = "Favorite",
-                        tint = if (isFavorite) Color.Red else Color.White
+                        tint = if (isFavorite) MaterialTheme.colorScheme.primary else Color.White
                     )
                 }
             }
@@ -177,8 +182,7 @@ fun BookItem(book: Book) {
 
                 Text(
                     text = book.nama,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.titleLarge
                 )
 
                 Spacer(modifier = Modifier.height(6.dp))
@@ -199,8 +203,12 @@ fun BookItem(book: Book) {
 
                 Button(
                     onClick = {},
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary
+                    )
+                )
+                {
                     Text("Baca Sekarang")
                 }
             }
