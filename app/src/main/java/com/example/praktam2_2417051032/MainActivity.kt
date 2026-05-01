@@ -29,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import coil.compose.AsyncImage
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -129,9 +130,11 @@ fun BookRowItem(book: Book) {
     )
     {
         Column {
-            Image(
-                painter = painterResource(id = book.gambar),
+            AsyncImage(
+                model = book.gambar,
                 contentDescription = book.nama,
+                placeholder = painterResource(id = R.drawable.placeholder),
+                error = painterResource(id = R.drawable.error),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp),
@@ -170,9 +173,11 @@ fun BookItem(book: Book) {
             Column(modifier = Modifier.fillMaxWidth()) {
 
                 Box {
-                    Image(
-                        painter = painterResource(id = book.gambar),
+                    AsyncImage(
+                        model = book.gambar,
                         contentDescription = book.nama,
+                        placeholder = painterResource(id = R.drawable.placeholder),
+                        error = painterResource(id = R.drawable.error),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp),

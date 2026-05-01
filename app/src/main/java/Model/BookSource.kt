@@ -10,21 +10,21 @@ object BookSource {
             nama = "Little Women",
             pencipta = "Louisa May Alcott",
             deskripsi = "Kisah empat saudari March yang tumbuh bersama menghadapi kehidupan, cinta, dan impian mereka.",
-            gambar = R.drawable.littlewomen
+            gambar = "https://www.accartbooks.com/app/uploads/books/9780789214478-04-1.jpg"
         ),
 
         Book(
             nama = "Pride and Prejudice",
             pencipta = "Jane Austen",
             deskripsi = "Cerita romantis Elizabeth Bennet dan Mr. Darcy yang dipenuhi kesalahpahaman dan prasangka sosial.",
-            gambar = R.drawable.prideprejudice
+            gambar = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrpPwNtwVg53tJUg4asRwcUrSA1qo68jvFQA&s"
         ),
 
         Book(
             nama = "The Secret Garden",
             pencipta = "Frances Hodgson Burnett",
             deskripsi = "Seorang gadis menemukan taman rahasia yang mengubah hidupnya dan orang-orang di sekitarnya.",
-            gambar = R.drawable.thesecretgarden
+            gambar = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ93bWsdb_JBrRAYkeeMBW-sbemI1kxbXagfg&s"
         )
     )
 }
