@@ -1,13 +1,13 @@
 package com.example.praktam2_2417051032
 
-import Model.Book
-import Model.BookSource
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.runtime.LaunchedEffect
+import com.example.praktam2_2417051032.data.model.Book
+import com.example.praktam2_2417051032.data.repository.BookRepository
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,7 +47,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.background
 import androidx.compose.material3.ButtonDefaults
-// === TAMBAHAN IMPORT MODUL 9 ===
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -55,7 +54,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.foundation.layout.size
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-// ================================
 import com.example.praktam2_2417051032.ui.theme.PrakTAM2_2417051032Theme
 
 class MainActivity : ComponentActivity() {
@@ -81,40 +79,117 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BookList(modifier: Modifier = Modifier) {
 
-    val books = BookSource.dummyBook
+    var books by remember {
+        mutableStateOf<List<Book>>(emptyList())
+    }
 
-    LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .statusBarsPadding()
-            .background(MaterialTheme.colorScheme.background),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+    var isLoading by remember {
+        mutableStateOf(true)
+    }
 
-        item {
-            Text(
-                text = "Rekomendasi Populer",
-                style = MaterialTheme.typography.titleLarge
-            )
+    var isError by remember {
+        mutableStateOf(false)
+    }
 
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+    val repository = remember {
+        BookRepository()
+    }
+
+    LaunchedEffect(Unit) {
+
+        try {
+
+            books = repository.getBooks()
+
+            isLoading = false
+            isError = books.isEmpty()
+
+        } catch (e: Exception) {
+
+            isLoading = false
+            isError = true
+        }
+    }
+
+    if (isLoading) {
+
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+
+            CircularProgressIndicator()
+        }
+
+    } else if (isError || books.isEmpty()) {
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(32.dp),
+
+            contentAlignment = Alignment.Center
+        ) {
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(books) { book ->
-                    BookRowItem(book)
+
+                Text(
+                    text = "Error! gagal memuat data.",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = Color.Red
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "Pastikan koneksi internet Anda menyala",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
+
+    } else {
+
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .background(MaterialTheme.colorScheme.background),
+
+            contentPadding = PaddingValues(16.dp),
+
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+
+            item {
+
+                Text(
+                    text = "Rekomendasi Populer",
+                    style = MaterialTheme.typography.titleLarge
+                )
+
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+
+                    items(books) { book ->
+                        BookRowItem(book)
+                    }
                 }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Text(
+                    text = "Daftar Novel",
+                    style = MaterialTheme.typography.titleLarge
+                )
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Text(
-                text = "Daftar Novel",
-                style = MaterialTheme.typography.titleLarge
-            )
-        }
-        items(books) { book ->
-            BookItem(book)
+            items(books) { book ->
+                BookItem(book)
+            }
         }
     }
 }
@@ -158,6 +233,7 @@ fun BookItem(book: Book) {
     var isLoading by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+
 
 
     Box(modifier = Modifier.fillMaxWidth()) {
